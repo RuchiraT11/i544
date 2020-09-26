@@ -12,6 +12,13 @@ export default class Spreadsheet {
 
   constructor() {
     //@TODO
+    //return spreadsheet representation
+    this.cells={};
+    for(let column=0;column<26;column++){
+      for(let row=1;row<=99;row++){
+       return (column+10).toString(36).concat(row);
+      }
+    }
   }
 
   /** Set cell with id baseCellId to result of evaluating formula
@@ -26,6 +33,10 @@ export default class Spreadsheet {
   async eval(baseCellId, expr) {
     const updates = {};
     //@TODO
+    const ast= parse(expr);
+    var result= evaluateAst(ast);
+    this.cells=new CellInfo(baseCellId,expr,result,ast); //dependent
+    updates[baseCellId]=result;
     return updates;
   }
 
@@ -44,3 +55,21 @@ const FNS = {
 
 
 //@TODO add other classes, functions, constants etc as needed
+class CellInfo{
+  
+  constructor(id,expr,value,ast){  //,dependents
+      this.id= id;
+      this.expr=expr;
+      this.value= (value==null)?0:value;
+     // this.dependentSet=dependents;
+      this.ast=ast;
+  }
+  
+}
+//evaluateAst(ast) function will evaluate the ast based on its type: num, app, etc
+function evaluateAst(ast) {
+switch(ast.type){
+  case 'num':
+    return ast.value;
+}
+}
