@@ -1,6 +1,9 @@
-Name:		XXX
-B-Number:	XXX
-Email:		XXX
+Name:		Ruchira Thete
+B-Number:	B00815352
+Email:		rthete1@binghamton.edu
 
-Add text here as needed.
+Project 2:
+Aim:
+	-Add more functionality to the spreadsheet developed in the project 1.
+	-Make the spreadsheet persistent by persisting it to mongodb.
 
