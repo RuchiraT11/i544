@@ -6,4 +6,9 @@ Project 2:
 Aim:
 	-Add more functionality to the spreadsheet developed in the project 1.
 	-Make the spreadsheet persistent by persisting it to mongodb.
+	
+Completion Status:
+ 	34 Cases passed
+
+No.of Slack Days Used: 2 days
 
