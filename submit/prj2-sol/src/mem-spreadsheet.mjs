@@ -48,13 +48,25 @@ export default class MemSpreadsheet {
    */
   query(cellId) {
     //@TODO
-    return { };
+    //const emptyCell = new CellInfo(cellId);
+    //return { };
+    let emptyCell;
+    if(CellInfo.ast==null){
+      emptyCell=new CellInfo(cellId);
+      emptyCell.value=0;
+      emptyCell.ast=``;
+      return emptyCell;
+    }
+    else{
+      return emptyCell;
+    }
   }
 
   /** Clear contents of this spreadsheet. No undo information recorded. */
   clear() {
     this._undos = {};
-    //@TODO
+  
+    this._cells= {};
   }
 
   /** Delete all info for cellId from this spreadsheet. Return an
@@ -65,6 +77,9 @@ export default class MemSpreadsheet {
     this._undos = {};
     const results = {};
     //@TODO
+   // const results=this.eval(cellId,cellId.formula);
+   // const data2=this._updateCell(cellId,results.ast);
+    //const results = eval
     return results;
   }
 
@@ -75,7 +90,7 @@ export default class MemSpreadsheet {
    */
   copy(destCellId, srcCellId) {
     this._undos = {};
-    const results = {};
+    const results = this.eval(destCellId, formula);  //{};
     //@TODO
     return results;
   }
@@ -197,6 +212,7 @@ export default class MemSpreadsheet {
     }
   }
 
+  
 }
 
 
@@ -224,6 +240,14 @@ class CellInfo {
     return v;   
   }
 
+  getFormula(sourceCellId,destCellId)
+  {
+    const srcAst = this._cells[sourceCellId].ast;
+    console.log(srcAst);
+    const destFormula = srcAst.toString(destCellId);
+    return destFormula;
+  }
+
 }
 
 const FNS = {
@@ -234,3 +258,5 @@ const FNS = {
   min: (...args) => Math.min(...args),
   max: (...args) => Math.max(...args),
 }
+
+
