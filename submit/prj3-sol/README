@@ -1,6 +1,10 @@
-Name:		XXX
-B-Number:	XXX
-Email:		XXX
+Name:		Ruchira Thete
+B-Number:	B00815352
+Email:		rthet1@binghamton.edu
 
-Add text here as needed.
+Description:
+In this project, you will use the persistent spreadsheet similar to your Project 2 to implement JSON web services to retrieve and update spreadsheet data.
+The aims of this project are as follows:
+	-To expose you to expressjs.
+	-To make you design and implement REST web services.
 
