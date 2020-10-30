@@ -46,11 +46,105 @@ const STORE = 'store';
 function setupRoutes(app) {
   app.use(cors(CORS_OPTIONS));  //needed for future projects
   //@TODO add routes to handlers
+  app.use(bodyParser.json());
+  app.get(`/${BASE}/${STORE}/:ssName`,retrieveAllData(app));
+  app.delete(`/${BASE}/${STORE}/:ssName`,clearSpreadsheet(app));
+  app.put(`/${BASE}/${STORE}/:ssName/:cellId`,replaceSpreadsheetCell(app));
+  app.patch(`/${BASE}/${STORE}/:ssName/:cellId`,updateSpreadsheetCell(app));
+  app.delete(`/${BASE}/${STORE}/:ssName/:cellId`,deleteSpreadsheetCell(app));
+  
+  app.use(do404(app));
+  app.use(doErrors(app));
 }
 
 /****************************** Handlers *******************************/
 
 //@TODO
+//Retrieve all spreadsheet data
+function retrieveAllData(app){ 
+	return (async function(req,res){
+		try{
+			const SS_NAME= req.params.ssName;
+			const results= await app.locals.ssStore.readFormulas(SS_NAME);
+			res.json(results);
+		}
+		catch(err){
+			const mapped = mapError(err);
+			res.status(mapped.status).json(mapped);
+		}
+	});
+}
+
+//Clear Spreadsheet
+function clearSpreadsheet(app){
+	return (async function(req,res){
+	try{
+		const SS_NAME= req.params.ssName;
+		const results= await app.locals.ssStore.clear(SS_NAME);
+		res.sendStatus(NO_CONTENT);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+}
+
+//Replace Spreadsheet Cell
+function replaceSpreadsheetCell(app){
+	return(async function(req,res){
+	try{
+		const replace = Object.assign({},req.body);
+		const SS_Name= req.params.ssName;
+		const cellId = req.params.cellId;
+		const results = app.locals.ssStore.updateCell(SS_Name,cellId,replace.formula);
+		res.sendStatus(CREATED);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+
+}
+
+
+//Update spreadsheet cell
+function updateSpreadsheetCell(app){
+	return(async function(req,res){
+	try{
+		const patch = Object.assign({},req.body);
+		const SS_Name= req.params.ssName;
+		const cellId = req.params.cellId;
+		const results = app.locals.ssStore.updateCell(SS_Name,cellId,patch.formula);
+		res.sendStatus(NO_CONTENT);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+
+}
+
+//Delete Spreadsheet Cell
+function deleteSpreadsheetCell(app){
+	return(async function(req,res){
+	try{
+		const SS_Name= req.params.ssName;
+		const cellId = req.params.cellId;
+		const results = app.locals.ssStore.delete(SS_Name,cellId);
+		res.sendStatus(NO_CONTENT);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+
+}
+
+
 
 /** Default handler for when there is no route for a particular method
  *  and path.
@@ -86,6 +180,9 @@ function doErrors(app) {
 /*************************** Mapping Errors ****************************/
 
 const ERROR_MAP = {
+	EXISTS: CONFLICT,
+	NOT_FOUND: NOT_FOUND,
+	
 }
 
 /** Map domain/internal errors into suitable HTTP errors.  Return'd
