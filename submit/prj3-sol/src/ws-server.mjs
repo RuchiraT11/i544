@@ -48,6 +48,8 @@ function setupRoutes(app) {
   //@TODO add routes to handlers
   app.use(bodyParser.json());
   app.get(`/${BASE}/${STORE}/:ssName`,retrieveAllData(app));
+  app.put(`/${BASE}/${STORE}/:ssName`,replaceSpreadsheet(app));
+  app.patch(`/${BASE}/${STORE}/:ssName`,updateSpreadsheet(app));
   app.delete(`/${BASE}/${STORE}/:ssName`,clearSpreadsheet(app));
   app.put(`/${BASE}/${STORE}/:ssName/:cellId`,replaceSpreadsheetCell(app));
   app.patch(`/${BASE}/${STORE}/:ssName/:cellId`,updateSpreadsheetCell(app));
@@ -89,6 +91,48 @@ function clearSpreadsheet(app){
 	}
 	});
 }
+
+//Replace Spreadsheet
+function replaceSpreadsheet(app){
+	return(async function(req,res){
+	try{
+		const replaceData = Object.assign({},req.body);
+		const SS_Name= req.params.ssName;
+		for(let values of Object.values(replaceData)){
+			const cellId=values[0];
+			const formula=values[1];
+			const results = await app.locals.ssStore.updateCell(SS_Name,cellId,formula);
+		}
+		res.sendStatus(CREATED);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+}
+
+
+//Update Spreadsheet
+function updateSpreadsheet(app){
+	return(async function(req,res){
+	try{
+		const patch = Object.assign({},req.body);
+		const SS_Name= req.params.ssName;
+		for(let values of Object.values(patch)){
+			const cellId=values[0];
+			const formula=values[1];
+			const results = await app.locals.ssStore.updateCell(SS_Name,cellId,formula);
+		}
+		res.sendStatus(NO_CONTENT);
+	}
+	catch(err){
+		const mapped = mapError(err);
+		res.status(mapped.status).json(mapped);
+	}
+	});
+}
+
 
 //Replace Spreadsheet Cell
 function replaceSpreadsheetCell(app){
