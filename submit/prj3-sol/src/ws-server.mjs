@@ -138,11 +138,16 @@ function updateSpreadsheet(app){
 function replaceSpreadsheetCell(app){
 	return(async function(req,res){
 	try{
+		if((req.body).hasOwnProperty(`formula`)){   // replace.propertyIsEnumerable(`formula`)
 		const replace = Object.assign({},req.body);
 		const SS_Name= req.params.ssName;
 		const cellId = req.params.cellId;
 		const results = app.locals.ssStore.updateCell(SS_Name,cellId,replace.formula);
 		res.sendStatus(CREATED);
+		}
+		else{
+		res.sendStatus(BAD_REQUEST);
+		}
 	}
 	catch(err){
 		const mapped = mapError(err);
@@ -157,11 +162,16 @@ function replaceSpreadsheetCell(app){
 function updateSpreadsheetCell(app){
 	return(async function(req,res){
 	try{
+		if((req.body).hasOwnProperty(`formula`)){
 		const patch = Object.assign({},req.body);
 		const SS_Name= req.params.ssName;
 		const cellId = req.params.cellId;
 		const results = app.locals.ssStore.updateCell(SS_Name,cellId,patch.formula);
 		res.sendStatus(NO_CONTENT);
+		}
+		else{
+		res.sendStatus(BAD_REQUEST);
+		}
 	}
 	catch(err){
 		const mapped = mapError(err);
