@@ -8,3 +8,15 @@ The aims of this project are as follows:
 	-To expose you to expressjs.
 	-To make you design and implement REST web services.
 
+Completion Status:
+ Implemented JSON web service for all the required oprations/routes.
+ 	-Retrieve all spreadsheet data
+	-Replace all spreadsheet data
+	-Update spreadsheet data
+	-Clear spreadsheet
+	-Replace spreadsheet cell
+	-Update spreadsheet cell
+	-Delete spreadsheet cell
+
+Submitted on: 10/31/2020
+No.of slack days used: 0
