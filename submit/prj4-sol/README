@@ -1,0 +1,14 @@
+Name:		Ruchira Thete
+B-Number:	B00815352
+Email:		rthete1@binghamton.edu
+
+Aims:
+The aims of this project are as follows:
+
+	-To give you more experience with express.js.
+	-To expose you to using the mustache templating framework.
+	-To generate HTML on the server.
+
+Overview:
+In this project, you will use the spreadsheet store web services implemented in Project 3 to display a rudimentary UI which allows displaying and updating spreadsheets using a browser.
+
