@@ -32,6 +32,9 @@ export default class SSClient {
   async updateCell(ssName, cellId, formula) {
     try {
       //@TODO
+     const result=await this.axios.patch(`${BASE}/${ssName}/${cellId}`,{formula:formula});
+     return result.data;
+
     }
     catch (err) {
       rethrow(err);
@@ -43,6 +46,8 @@ export default class SSClient {
   async clear(ssName) {
     try {
       //@TODO
+      const result=await this.axios.delete(`${BASE}/${ssName}`);
+      return result.data;
     }
     catch (err) {
       rethrow(err);
@@ -54,6 +59,9 @@ export default class SSClient {
   async delete(ssName, cellId) {
     try {
       //@TODO
+      const result=await this.axios.delete(`${BASE}/${ssName}/${cellId}`);
+      return result.data;
+      
     }
     catch (err) {
       rethrow(err);
@@ -64,6 +72,8 @@ export default class SSClient {
   async readFormulas(ssName) {
     try {
       //@TODO
+      const result= await this.axios.get(`${BASE}/${ssName}`);
+      return result.data;
     }
     catch (err) {
       rethrow(err);
