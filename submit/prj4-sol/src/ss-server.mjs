@@ -40,9 +40,15 @@ export default function serve(port, store) {
 /*********************** Routes and Handlers ***************************/
 
 function setupRoutes(app) {
+  const base=app.locals.base;
   app.use(bodyParser.urlencoded({extended: true}));
   
   //@TODO add routes
+  app.get(`/`,routeHandle(app));
+  app.post(`/`,bodyParser.urlencoded({extended: false}),doSubmit(app));
+  app.get(`/ss/:ssName`,redirectToSpreadsheet(app));
+  app.post(`/ss/:ssName`,bodyParser.urlencoded({extended: false}),updateSpreadsheet(app));
+  
   //must be last
   app.use(do404(app));
   app.use(doErrors(app));
@@ -50,6 +56,51 @@ function setupRoutes(app) {
 }
 
 //@TODO add handlers
+function routeHandle(app){
+return async function(req,res){
+	res.send(app.locals.mustache.render('openSpreadsheet'));
+	}
+}
+
+function doSubmit(app){
+return async function(req,res){
+const ssName=req.params.ssName;
+	/*const isSubmit=req.query.submit!==undefined;
+	let errors=undefined;
+	let model, template;
+	const ssName=req.params.ssName;
+	if(isSubmit){
+		errors=validateFields(req.params,ssName,errors);
+		if(errors){
+			const msg=`Please enter valid spreadsheet name`;
+			errors=Object.assign(errors || {}, { _:msg });
+			//template = `openSpreadsheet`;
+		}else{
+			template= `updateSpreadsheet`;
+			//res.send(app.locals.mustache.render(template));
+			await app.locals.store.make(ssName);
+		}
+		res.redirect(`${app.locals.base}/${ssName}.html`);
+	}*/
+	
+	res.send(app.locals.mustache.render('updateSpreadsheet'));
+	}
+}
+function redirectToSpreadsheet(app){
+return async function(req,res){
+	res.send(app.locals.mustache.render('updateSpreadsheet'));
+	
+	}
+}
+function updateSpreadsheet(app){
+return async function(req,res){
+	res.send(app.locals.mustache.render('updateSpreadsheet'));
+	//const id= await app.locals.model.get(ssName);
+	//const model = {base:app.locals.base, fields:FIELDS};
+	//const html=doMustache(app,`updateSpreadsheet`,model);
+	//res.send(html);
+	}
+}
 
 /** Default handler for when there is no route for a particular method
  *  and path.
@@ -217,5 +268,11 @@ function requestUrl(req, index) {
     }
   }
   return url;
+}
+
+function doMustache(app,templateId,view){
+	const templates={ footer:app.templates.footer };
+	return mustache.render(app.templates[templateId],view,templates);
+
 }
 
